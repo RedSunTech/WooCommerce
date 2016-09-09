@@ -136,7 +136,7 @@ $_str_inputs_product = '';
 foreach($ary_product as $v){
   $str_input = '';//reset
   $str_input.= '<input type="hidden" name="ProductName'.$idx.'" value="'.$v['name'].'">';
-  $str_input.= '<input type="hidden" name="ProductPrice'.$idx.'" value="'.$v['price'].'">';
+  $str_input.= '<input type="hidden" name="ProductPrice'.$idx.'" value="'.round($v['price'], 0).'">';
   $str_input.= '<input type="hidden" name="ProductQuantity'.$idx.'" value="'.$v['qty'].'">';
   $_str_inputs_product .= $str_input;
   $idx++;
