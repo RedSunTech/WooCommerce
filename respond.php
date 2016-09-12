@@ -85,7 +85,7 @@ if($is_suntech_posting){
       $order->payment_complete();
       $html_output = $html_output_default; 
     }
-    else if ($is_interrupt and $ChkValue==strtoupper(sha1($web.$webpwd.$buysafeno.$MN.$errcode))) {
+    else if ($is_interrupt and $ChkValue==strtoupper(sha1($web.$webpwd.$buysafeno.$MN.$_POST['EntityATM']))) {
       $order = new WC_Order( $order_id );
       $order->update_status( 'on-hold', __( '等待付款', 'woocommerce' ) );
       $html_output = $html_output_24pay; 
@@ -93,13 +93,13 @@ if($is_suntech_posting){
 
   break;
   case 'paycode':
-    if($is_succ_from_suntech and $ChkValue==strtoupper(sha1($web.$webpwd.$buysafeno.$MN.$paycode))){
+    if($is_succ_from_suntech and $ChkValue==strtoupper(sha1($web.$webpwd.$buysafeno.$MN.$errcode))){
       $order = new WC_Order( $order_id );
       //$order->update_status( 'completed' );
       $order->payment_complete();
       $html_output = $html_output_default;
     }
-    else if ($is_interrupt and $ChkValue==strtoupper(sha1($web.$webpwd.$buysafeno.$MN.$errcode))) {
+    else if ($is_interrupt and $ChkValue==strtoupper(sha1($web.$webpwd.$buysafeno.$MN.$paycode))) {
       $order = new WC_Order( $order_id );
       $order->update_status( 'on-hold', __( '等待付款', 'woocommerce' ) );
       $html_output = $html_output_paycode; 
@@ -121,3 +121,4 @@ else{
 echo '交易失敗，請重新交易。'.(($_POST['errmsg']!='') ? '<br>原因：'.urldecode($_POST['errmsg']):'');
 }
 echo'<p><a href="'.$home_url.'">回首頁</a></p>';
+?>
