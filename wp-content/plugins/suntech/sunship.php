@@ -4,9 +4,9 @@
  * @version 1.1
  */
 /*
-Plugin Name: 紅陽_BuySafe / 信用卡
+Plugin Name: 紅陽_SunShip / 交貨便
 Plugin URI: https://www.esafe.com.tw/Question_Fd/DownloadPapers.aspx
-Description: 紅陽信用卡
+Description: 紅陽 7-11 交貨便
 Author: suntech
 Version: 1.1
 Author URI: https://www.esafe.com.tw/Question_Fd/DownloadPapers.aspx
@@ -17,14 +17,12 @@ if (!defined('ABSPATH')) exit;
 //require_once woocommerce manually
 require_once dirname(__FILE__) . '/base.php';
 
-class WC_Gateway_Suntech_Buysafe extends WC_Gateway_Suntech_Base
+class WC_Gateway_Suntech_Sunship extends WC_Gateway_Suntech_Base
 {
-
-    private $log_option_prefix;
 
     public function __construct()
     {
-        $this->id = 'suntech_buysafe';
+        $this->id = 'suntech_sunship';
         $this->log_option_prefix = self::WOO_LOG_NAME_1 . $this->id . self::WOO_LOG_NAME_2;
         $this->icon = '';
         $this->has_fields = false;//#
@@ -37,16 +35,13 @@ class WC_Gateway_Suntech_Buysafe extends WC_Gateway_Suntech_Base
         // Define user set variables
         $this->enabled = $this->get_option('enabled');
         $this->title = $this->get_option('title');
-        $this->description = ($this->get_option('description')!='')?$this->get_option('description'):'紅陽金流_信用卡刷卡(BuySafe)';
+        $this->description = $this->get_option('description');
         $this->web_value = $this->get_option('web_value');
         $this->web_password_value = $this->get_option('web_password_value');
-        $this->installments = $this->get_option('installments');
-        $this->shipment = $this->get_option('shipment');
 
         // Add actions
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
         add_action('woocommerce_receipt_' . $this->id, array($this, 'receipt_page'));
-
     }
 
     public function init_from_fields()
@@ -56,42 +51,24 @@ class WC_Gateway_Suntech_Buysafe extends WC_Gateway_Suntech_Base
             'enabled' => array(
                 'title' => __('是否啟用', 'woocommerce'),
                 'type' => 'checkbox',
-                'label' => __('啟用紅陽信用卡(BuySafe)', 'woocommerce'),
+                'label' => __('啟用紅陽7-11交貨便(SunShip)', 'woocommerce'),
                 'default' => 'yes'
             ),
             'title' => array(
                 'title' => __('顯示名稱', 'woocommerce'),
                 'type' => 'text',
-                'default' => __('信用卡', 'woocommerce'),
+                'default' => __('超商取貨付款', 'woocommerce'),
                 'desc_tip' => true,
             ),
             'description' => array(
                 'title' => __('金流描述', 'woocommerce'),
                 'type' => 'textarea',
                 'description' => __('顯示在前台的描述文字', 'woocommerce'),
-                'default' => __('信用卡刷卡', 'woocommerce')
+                'default' => __('超商取貨付款', 'woocommerce')
             ),
             'web_value' => array('title' => '商家代號', 'type' => 'text', 'description' => '請登入紅陽後台查詢商家代號(需檢查前後不可有空白)'),
             'web_password_value' => array('title' => '商家交易密碼', 'type' => 'password', 'description' => '請到紅陽官網 https://www.esafe.com.tw 登入商家專區設定交易密碼'),
             'order_button_text' => array('title' => '前台按鈕顯示文字', 'type' => 'text', 'default' => '結帳'),
-            'installments' => array(
-                'title' => '付款方式',
-                'type' => 'multiselect',
-                'description' => '請按住 ctrl+左鍵 進行複選',
-                'options' => array(
-                    '3' => '分3期',
-                    '6' => '分6期',
-                    '12' => '分12期',
-                    '18' => '分18期',
-                    '24' => '分24期'
-                )
-            ),
-            'shipment' => array(
-                'title' => __('搭配超商取貨', 'woocommerce'),
-                'type' => 'checkbox',
-                'label' => __('啟用', 'woocommerce'),
-                'default' => 'no'
-            ),
             'test_mode' => array(
                 'title' => __('測試模式', 'woocommerce'),
                 'type' => 'checkbox',
@@ -99,8 +76,6 @@ class WC_Gateway_Suntech_Buysafe extends WC_Gateway_Suntech_Base
                 'default' => 'no'
             ),
         );
-
-
     }
 
     /**
@@ -115,28 +90,25 @@ class WC_Gateway_Suntech_Buysafe extends WC_Gateway_Suntech_Base
         $woocommerce->cart->empty_cart();
         $order = new WC_Order($order_id);
 
-        /*var_dump($order->get_total());
-        var_dump($order->get_total_shipping());
-        var_dump($order->get_total_tax());*/
         $total_amount = self::get_total($order);
         $web_password = $this->web_password_value;
 
         $_web = $this->web_value;
         $_MN = round($total_amount, 0);
+        $_online = "1";
         $_Td = $order->id;
-        $_OrderInfo = urlencode('在' . $_SERVER['SERVER_NAME'] . '的訂單編號' . $order->id . '新增於' . $order->order_date);
+        $_OrderInfo = '在' . $_SERVER['SERVER_NAME'] . '的訂單編號' . $order->id . '新增於' . $order->order_date;
         $_sna = $order->billing_first_name . $order->billing_last_name;
         $_sdt = $order->billing_phone;
         $_email = $order->billing_email;
         if (!filter_var($_email, FILTER_VALIDATE_EMAIL) or strlen($_email) > self::SUNTECH_EMAIL_MAX_LENGTH) {
             $_email = '';
         }
-        $_note1 = urlencode(self::get_note1('buysafe', $order, 'billing_email'));
-        $_Card_Type = self::BUYSAFE_CARD_TYPE_DEFAULT;
+        $_note1 = self::get_note1('sunship', $order, 'billing_email');
 
         $comment = $this->get_order_init_notes($order_id)->comment_content;
         list($_Term, $_CargoFlag) = explode('_', $comment);
-        $_ChkValue = $this->get_post_submit_ChkValue($this->web_value, $this->web_password_value, $total_amount, $_Term);
+        $_ChkValue = $this->get_post_submit_ChkValue($this->web_value, $this->web_password_value, $total_amount);
 
         $update_option_datetime = date('YmdHis');
         $opt_name = $this->log_option_prefix . $update_option_datetime;
@@ -144,7 +116,7 @@ class WC_Gateway_Suntech_Buysafe extends WC_Gateway_Suntech_Base
 
         update_option($opt_name, serialize(array(
             'web' => $_web, 'web_password' => $web_password, 'MN' => $_MN, 'Td' => $_Td, 'OrderInfo' => $_OrderInfo, 'sna' => $_sna, 'sdt' => $_sdt, 'email' => $_email, 'note1' => $_note1,
-            'note2' => $_note2, 'Card_Type' => $_Card_Type, 'ChkValue' => $_ChkValue,
+            'note2' => $_note2, 'ChkValue' => $_ChkValue,
             'ip' => $this->get_meta_when_submit('IP'),
             'uri' => $this->get_meta_when_submit('URI'),
             'referurl' => $this->get_meta_when_submit('REFERURL'),
@@ -160,75 +132,24 @@ class WC_Gateway_Suntech_Buysafe extends WC_Gateway_Suntech_Base
                 <input type="hidden" name="email" value="' . $_email . '">
                 <input type="hidden" name="note1" value="' . $_note1 . '">
                 <input type="hidden" name="note2" value="' . $_note2 . '">
-                <input type="hidden" name="Card_Type" value="' . $_Card_Type . '">
-                <input type="hidden" name="Term" value="' . $_Term . '">
-                <input type="hidden" name="ChkValue" value="' . $_ChkValue . '">
-                <input type= "hidden" name="CargoFlag" value="' . $_CargoFlag . '">';
+                <input type="hidden" name="ChkValue" value="' . $_ChkValue . '">';
 
-        echo $this->display_suntech_form($html);
-    }
-
-
-    public function payment_fields()
-    {
-        if (!empty($this->description)) {
-            echo $this->description . '<br /><br />';
-        }
-
-        if (count($this->installments) > 0) {
-            echo '<label>付款方式</label>';
-            echo'<select name="installment">';
-            echo '<option value="">一次付清</option>';
-            foreach ($this->installments as $installment) {
-                echo '<option value="' . $installment . '">';
-                echo '分' . $installment . '期';
-                echo '</option>';
-            }
-            echo '</select>';
-        }
-        if ($this->shipment == 'yes') {
-            echo '<div class="" style="padding-top: 15px"><label>';
-            echo '<input type="checkbox" name="shipment" value="ship"/>';
-            echo '超商取貨</label></div>';
-        }
+        echo $this->display_suntech_form($html, '結帳並選擇取貨門市');
     }
 
     public function validate_fields()
     {
-        $choose_installment = isset($_POST['installment']) ? $_POST['installment'] : '';
-        $choose_shipment = isset($_POST['shipment']) ? $_POST['shipment'] : '';
-
-        if ($choose_installment != '') {
-            array_push($this->installments, '');
-            if (in_array($choose_installment, $this->installments)) {
-                $this->choose_installment = $choose_installment;
-            } else {
-                wc_add_notice('分期錯誤，請重新選擇！', 'error');
-                return false;
-            }
-        }
-
-        if ($choose_shipment != '') {
-            if ($choose_shipment == 'ship') {
-                $this->choose_shipment = '1';
-            } else {
-                wc_add_notice('發生錯誤，請重新選擇！', 'error');
-                return false;
-            }
-        }
-
         wc_add_notice('謝謝您的訂購，訂購流程尚未完成，請點擊按鈕進入結帳流程頁面...');
         return true;
     }
 }
 
 
-function add_woocommerce_suntechbuysafe_gateway($methods)
+function add_woocommerce_suntechsunship_gateway($methods)
 {
-    $methods[] = 'WC_Gateway_Suntech_Buysafe';
+    $methods[] = 'WC_Gateway_Suntech_Sunship';
     return $methods;
 }
 
-
-add_filter('woocommerce_payment_gateways', 'add_woocommerce_suntechbuysafe_gateway');
+add_filter('woocommerce_payment_gateways', 'add_woocommerce_suntechsunship_gateway');
 
