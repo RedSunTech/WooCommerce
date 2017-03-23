@@ -175,10 +175,10 @@ class WC_Gateway_Suntech_Buysafe extends WC_Gateway_Suntech_Base
             echo $this->description . '<br /><br />';
         }
 
-        if (count($this->installments) > 0) {
+        if ($this->installments) {
             echo '<label>付款方式</label>';
             echo'<select name="installment">';
-            echo '<option value="">一次付清</option>';
+            echo '<option value="1">一次付清</option>';
             foreach ($this->installments as $installment) {
                 echo '<option value="' . $installment . '">';
                 echo '分' . $installment . '期';
@@ -186,6 +186,7 @@ class WC_Gateway_Suntech_Buysafe extends WC_Gateway_Suntech_Base
             }
             echo '</select>';
         }
+        
         if ($this->shipment == 'yes') {
             echo '<div class="" style="padding-top: 15px"><label>';
             echo '<input type="checkbox" name="shipment" value="ship"/>';
@@ -198,8 +199,7 @@ class WC_Gateway_Suntech_Buysafe extends WC_Gateway_Suntech_Base
         $choose_installment = isset($_POST['installment']) ? $_POST['installment'] : '';
         $choose_shipment = isset($_POST['shipment']) ? $_POST['shipment'] : '';
 
-        if ($choose_installment != '') {
-            array_push($this->installments, '');
+        if (is_numeric($choose_installment) && $choose_installment > 1) {
             if (in_array($choose_installment, $this->installments)) {
                 $this->choose_installment = $choose_installment;
             } else {
