@@ -126,8 +126,9 @@ class WC_Gateway_Suntech_Base extends WC_Payment_Gateway
         $payment_str .= ")";
 
         if ($this->get_order_init_notes($order_id) == '') {
+            $order->add_order_note($this->choose_installment . '_' . $this->choose_shipment);   // 判斷分期 & 超商取貨用
             $order->add_order_note('建立新訂單，等待付款' . $payment_str, 1);
-            $order->add_order_note($this->choose_installment . '_' . $this->choose_shipment);
+
         }
         return array('result' => 'success', 'redirect' => $order->get_checkout_payment_url(true));#woocommerce array spec
     }
@@ -153,7 +154,10 @@ class WC_Gateway_Suntech_Base extends WC_Payment_Gateway
 
         $args = array(
             'post_id' => $order_id,
-            'approve' => 'approve'
+            'orderby' => 'comment_ID',
+            'order'   => 'ASC',
+            'approve' => 'approve',
+            'type'    => 'order_note',
         );
         remove_filter('comments_clauses', array('WC_Comments', 'exclude_order_comments'));
         $comments = get_comments($args);
