@@ -89,13 +89,9 @@ class WC_Gateway_Suntech_Sunship extends WC_Gateway_Suntech_Base
         global $woocommerce;
         $woocommerce->cart->empty_cart();
         $order = new WC_Order($order_id);
-
         $total_amount = self::get_total($order);
         $web_password = $this->web_password_value;
-
         $_web = $this->web_value;
-        $_MN = round($total_amount, 0);
-        $_online = "1";
         $_Td = $order->id;
         $_OrderInfo = '在' . $_SERVER['SERVER_NAME'] . '的訂單編號' . $order->id . '新增於' . $order->order_date;
         $_sna = $order->billing_first_name . $order->billing_last_name;
@@ -115,7 +111,7 @@ class WC_Gateway_Suntech_Sunship extends WC_Gateway_Suntech_Base
         $_note2 = $update_option_datetime;
 
         update_option($opt_name, serialize(array(
-            'web' => $_web, 'web_password' => $web_password, 'MN' => $_MN, 'Td' => $_Td, 'OrderInfo' => $_OrderInfo, 'sna' => $_sna, 'sdt' => $_sdt, 'email' => $_email, 'note1' => $_note1,
+            'web' => $_web, 'web_password' => $web_password, 'MN' => $total_amount, 'Td' => $_Td, 'OrderInfo' => $_OrderInfo, 'sna' => $_sna, 'sdt' => $_sdt, 'email' => $_email, 'note1' => $_note1,
             'note2' => $_note2, 'ChkValue' => $_ChkValue,
             'ip' => $this->get_meta_when_submit('IP'),
             'uri' => $this->get_meta_when_submit('URI'),
@@ -124,7 +120,7 @@ class WC_Gateway_Suntech_Sunship extends WC_Gateway_Suntech_Base
         )));
 
         $html = '<input type="hidden" name="web" value="' . $_web . '">
-                <input type="hidden" name="MN" value="' . $_MN . '">
+                <input type="hidden" name="MN" value="' . $total_amount . '">
                 <input type="hidden" name="Td" value="' . $_Td . '">
                 <input type="hidden" name="OrderInfo" value="' . $_OrderInfo . '">
                 <input type="hidden" name="sna" value="' . $_sna . '">
