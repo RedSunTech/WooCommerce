@@ -52,19 +52,13 @@ if ($is_suntech_posting) {
     $MN = isset($_POST['MN']) ? $_POST['MN'] : '';
     $CargoNo = isset($_POST['CargoNo']) ? $_POST['CargoNo'] : '';
     $StoreType = isset($_POST['StoreType']) ? $_POST['StoreType'] : '';
+    $StoreName = isset($_POST['StoreName']) ? urldecode($_POST['StoreName']) : '';
     list($payment_type, $order_email, $order_id) = explode($note1_spliter, $note1);
     $setting = get_option('woocommerce_suntech_' . WC_Gateway_Suntech_Base::get_class_id($payment_type) . '_settings');
     $webpwd = $setting['web_password_value'];
     $is_succ_from_suntech = $errcode === '0' || $errcode === 0 || $errcode === '00' || $errcode === 00;
     $is_interrupt = $errcode === '';
     $order = new WC_Order($order_id);
-    //$payment_type = str_replace(WC_Gateway_Suntech_Base::SPLITER_IN_NOTE1, '', $payment_type);
-    //$alipay_in_note1 = str_replace(WC_Gateway_Suntech_Base::SPLITER_IN_NOTE1, '', WC_Gateway_Suntech_Base::get_note1('alipay'));
-    //$buysafecardtype1_in_note1 = str_replace(WC_Gateway_Suntech_Base::SPLITER_IN_NOTE1, '', WC_Gateway_Suntech_Base::get_note1('buysafecardtype1'));
-    //$buysafe_in_note1 = str_replace(WC_Gateway_Suntech_Base::SPLITER_IN_NOTE1, '', WC_Gateway_Suntech_Base::get_note1('buysafe'));
-    //$webatm_in_note1 = str_replace(WC_Gateway_Suntech_Base::SPLITER_IN_NOTE1, '', WC_Gateway_Suntech_Base::get_note1('webatm'));
-    //$pay24_in_note1 = str_replace(WC_Gateway_Suntech_Base::SPLITER_IN_NOTE1, '', WC_Gateway_Suntech_Base::get_note1('pay24'));
-    //$paycode_in_note1 = str_replace(WC_Gateway_Suntech_Base::SPLITER_IN_NOTE1, '', WC_Gateway_Suntech_Base::get_note1('paycode'));
 
     switch ($payment_type) {
         case 'unionpay':
@@ -79,7 +73,7 @@ if ($is_suntech_posting) {
             } elseif ($CargoNo != '' and $ChkValue == strtoupper(sha1($web . $webpwd . $buysafeno . $MN . $errcode . $CargoNo))) {
                 if ($order->has_status('pending')) {
                     $order->add_order_note($paid_msg . sprintf($cargo_init_msg, $CargoNo, $CargoNo), 1);
-                    $shipping_info['address_1'] = '7-ELEVEN' . $_POST['StoreName'];
+                    $shipping_info['address_1'] = '7-ELEVEN' . $StoreName;
                     $order->set_address($shipping_info, 'shipping');
                     $order->payment_complete();
                 }
@@ -103,7 +97,7 @@ if ($is_suntech_posting) {
                 exit;
             } else if ($is_succ_from_suntech and $ChkValue == strtoupper(sha1($web . $webpwd . $buysafeno . $MN . $errcode . $CargoNo))) {
                 $order->add_order_note($paid_msg . '(' . $_24payment_type[$pay_type] . ')' . sprintf($cargo_init_msg, $CargoNo, $CargoNo), 1);
-                $shipping_info['address_1'] = '7-ELEVEN' . $_POST['StoreName'];
+                $shipping_info['address_1'] = '7-ELEVEN' . $StoreName;
                 $order->set_address($shipping_info, 'shipping');
                 $order->payment_complete();
                 echo '0000';
@@ -133,7 +127,7 @@ if ($is_suntech_posting) {
                 exit;
             } else if ($is_succ_from_suntech and $ChkValue == strtoupper(sha1($web . $webpwd . $buysafeno . $MN . $errcode . $CargoNo))) {
                 $order->add_order_note($paid_msg . sprintf($cargo_init_msg, $CargoNo, $CargoNo), 1);
-                $shipping_info['address_1'] = '7-ELEVEN' . $_POST['StoreName'];
+                $shipping_info['address_1'] = '7-ELEVEN' . $StoreName;
                 $order->set_address($shipping_info, 'shipping');
                 $order->payment_complete();
                 echo '0000';
@@ -150,7 +144,7 @@ if ($is_suntech_posting) {
             if ($CargoNo != '' and $ChkValue == strtoupper(sha1($web . $webpwd . $buysafeno . $MN . $errcode . $CargoNo))) {
                 if ($order->has_status('pending')) {
                     $order->add_order_note(sprintf($cargo_init_msg, $CargoNo, $CargoNo), 1);
-                    $shipping_info['address_1'] = '7-ELEVEN' . $_POST['StoreName'];
+                    $shipping_info['address_1'] = '7-ELEVEN' . $StoreName;
                     $order->set_address($shipping_info, 'shipping');
                     $order->update_status('processing');
                 }
