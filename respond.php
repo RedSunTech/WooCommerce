@@ -160,7 +160,7 @@ if ($is_suntech_posting) {
 
     // 物流回傳
     if ($StoreType != '' and $ChkValue == strtoupper(sha1($web . $webpwd . $buysafeno . $StoreType))) {
-        $StoreMsg = isset($_POST['StoreMsg']) ? $_POST['StoreMsg'] : '';
+        $StoreMsg = isset($_POST['StoreMsg']) ? urldecode($_POST['StoreMsg']): '';
         if ($StoreType == "1010") {
             $order->update_status('completed');
         }
