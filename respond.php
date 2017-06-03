@@ -58,7 +58,16 @@ if ($is_suntech_posting) {
     $webpwd = $setting['web_password_value'];
     $is_succ_from_suntech = $errcode === '0' || $errcode === 0 || $errcode === '00' || $errcode === 00;
     $is_interrupt = $errcode === '';
-    $order = new WC_Order($order_id);
+
+    try{
+        $order = new WC_Order($order_id);
+    }
+    catch(Exception $e) {
+        $logger = wc_get_logger();
+        $logger->alert( 'note1: "' . $_POST['note1'] . '" ' . $e->getMessage());
+        echo '<script>alert("訂單不存在。");location.href="' . $home_url . '";</script>';
+        exit;
+    }
 
     switch ($payment_type) {
         case 'unionpay':
@@ -168,6 +177,12 @@ if ($is_suntech_posting) {
         echo '0000';
         exit;
     }
+}
+else {
+    $logger = wc_get_logger();
+    $logger->alert( 'note1: "' . $_POST['note1'] . '"');
+    echo '<script>location.href="' . $home_url . '";</script>';
+    exit;
 }
 
 echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">';
