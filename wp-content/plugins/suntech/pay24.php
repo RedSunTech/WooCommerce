@@ -22,7 +22,7 @@ class WC_Gateway_Suntech_Pay24 extends WC_Gateway_Suntech_Base
 
     public function __construct()
     {
-        $this->id = 'suntech_24pay';
+        $this->id = 'suntech_pay24';
         $this->log_option_prefix = self::WOO_LOG_NAME_1 . $this->id . self::WOO_LOG_NAME_2;
         $this->icon = '';
         $this->has_fields = false;//#

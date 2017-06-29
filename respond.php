@@ -118,9 +118,10 @@ if ($is_suntech_posting) {
                 $PostBarcodeA = isset($_POST['PostBarcodeA']) ? $_POST['PostBarcodeA'] : '';
                 $PostBarcodeB = isset($_POST['PostBarcodeB']) ? $_POST['PostBarcodeB'] : '';
                 $PostBarcodeC = isset($_POST['PostBarcodeC']) ? $_POST['PostBarcodeC'] : '';
+                $client_msg = '請至email列印繳費單至超商繳費或ATM轉帳：<br/>台新銀行代碼：812，分行代碼：0687<br/>帳號：%s';
                 $barcode_msg = '商店自行產生繳費單專用訊息：<br/>●超商第一段條碼：%s<br/>超商第二段條碼：%s<br/>超商第三段條碼：%s<br/>●郵局第一段條碼：%s<br/>郵局第二段條碼：%s<br/>郵局第三段條碼：%s<br/>●ATM轉帳帳號(金額大於3萬請臨櫃匯款)：<br/>台新銀行代碼：812，分行代碼：0687<br/>帳號：%s';
                 if ($order->has_status('pending')) {
-                    $order->add_order_note('請至email列印繳費單，至超商繳費', 1);
+                    $order->add_order_note(sprintf($client_msg, $_POST['EntityATM']), 1);
                     $order->add_order_note(sprintf($barcode_msg, $BarcodeA, $BarcodeB, $BarcodeC, $PostBarcodeA, $PostBarcodeB, $PostBarcodeC, $_POST['EntityATM']));
                     $order->update_status('on-hold');
                 }
@@ -188,10 +189,6 @@ else {
 echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">';
 if ($html_output != '') {
     echo $html_output;
-} elseif (isset($_GET['is_suntech_24pay'])) {
-    echo $html_output_24pay;
-} elseif (isset($_GET['is_suntech_paycode'])) {
-    echo $html_output_paycode;
 } else {
     if ($order->has_status('pending')) {
         $order->add_order_note('交易失敗，' . urldecode($_POST['errmsg']) . "(" . $errcode . ")", 1);
