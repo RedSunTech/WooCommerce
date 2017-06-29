@@ -26,7 +26,7 @@ class WC_Gateway_Suntech_Webatm extends WC_Gateway_Suntech_Base
         $this->log_option_prefix = self::WOO_LOG_NAME_1 . $this->id . self::WOO_LOG_NAME_2;
         $this->icon = '';
         $this->has_fields = false;//#
-        $this->order_button_text = $this->get_option('order_button_text');
+        $this->order_button_text = '結帳';
 
         // Load the settings.
         $this->init_from_fields();
@@ -140,7 +140,7 @@ class WC_Gateway_Suntech_Webatm extends WC_Gateway_Suntech_Base
                 <input type="hidden" name="ChkValue" value="' . $_ChkValue . '">
                 <input type= "hidden" name="CargoFlag" value="' . $_CargoFlag . '">';
 
-        echo $this->display_suntech_form($html);
+        echo $this->display_suntech_form($html, $this->get_option('order_button_text'));
     }
 
     public function payment_fields()

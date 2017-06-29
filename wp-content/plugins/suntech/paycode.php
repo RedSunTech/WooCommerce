@@ -26,7 +26,7 @@ class WC_Gateway_Suntech_Paycode extends WC_Gateway_Suntech_Base
         $this->log_option_prefix = self::WOO_LOG_NAME_1 . $this->id . self::WOO_LOG_NAME_2;
         $this->icon = '';
         $this->has_fields = false;//#
-        $this->order_button_text = $this->get_option('order_button_text');
+        $this->order_button_text = '結帳';
 
         // Load the settings.
         $this->init_from_fields();
@@ -69,7 +69,7 @@ class WC_Gateway_Suntech_Paycode extends WC_Gateway_Suntech_Base
             ),
             'web_value' => array('title' => '商家代號', 'type' => 'text', 'description' => '請登入紅陽後台查詢商家代號(需檢查前後不可有空白)'),
             'web_password_value' => array('title' => '商家交易密碼', 'type' => 'password', 'description' => '請到紅陽官網 https://www.esafe.com.tw 登入商家專區設定交易密碼'),
-            'order_button_text' => array('title' => '前台按鈕顯示文字', 'type' => 'text', 'default' => '結帳'),
+            'order_button_text' => array('title' => '前台按鈕顯示文字', 'type' => 'text', 'default' => '取得代碼'),
             'due_date' => array('title' => '付款期限(天)', 'type' => 'text', 'default' => '7', 'description' => '不設定即為7天'),
             'shipment' => array(
                 'title' => __('搭配超商取貨', 'woocommerce'),
@@ -184,7 +184,7 @@ class WC_Gateway_Suntech_Paycode extends WC_Gateway_Suntech_Base
                 <input type="hidden" name="ChkValue" value="' . $_ChkValue . '">
                 <input type= "hidden" name="CargoFlag" value="' . $_CargoFlag . '">';
 
-        echo $this->display_suntech_form($html, '取得代碼');
+        echo $this->display_suntech_form($html, $this->get_option('order_button_text'));
     }
 
     public function payment_fields()

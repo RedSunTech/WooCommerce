@@ -26,7 +26,7 @@ class WC_Gateway_Suntech_Sunship extends WC_Gateway_Suntech_Base
         $this->log_option_prefix = self::WOO_LOG_NAME_1 . $this->id . self::WOO_LOG_NAME_2;
         $this->icon = '';
         $this->has_fields = false;//#
-        $this->order_button_text = $this->get_option('order_button_text');
+        $this->order_button_text = '結帳';
 
         // Load the settings.
         $this->init_from_fields();
@@ -68,7 +68,7 @@ class WC_Gateway_Suntech_Sunship extends WC_Gateway_Suntech_Base
             ),
             'web_value' => array('title' => '商家代號', 'type' => 'text', 'description' => '請登入紅陽後台查詢商家代號(需檢查前後不可有空白)'),
             'web_password_value' => array('title' => '商家交易密碼', 'type' => 'password', 'description' => '請到紅陽官網 https://www.esafe.com.tw 登入商家專區設定交易密碼'),
-            'order_button_text' => array('title' => '前台按鈕顯示文字', 'type' => 'text', 'default' => '結帳'),
+            'order_button_text' => array('title' => '前台按鈕顯示文字', 'type' => 'text', 'default' => '選擇門市'),
             'test_mode' => array(
                 'title' => __('測試模式', 'woocommerce'),
                 'type' => 'checkbox',
@@ -130,7 +130,7 @@ class WC_Gateway_Suntech_Sunship extends WC_Gateway_Suntech_Base
                 <input type="hidden" name="note2" value="' . $_note2 . '">
                 <input type="hidden" name="ChkValue" value="' . $_ChkValue . '">';
 
-        echo $this->display_suntech_form($html, '結帳並選擇取貨門市');
+        echo $this->display_suntech_form($html, $this->get_option('order_button_text'));
     }
 
     public function validate_fields()
