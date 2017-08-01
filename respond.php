@@ -43,7 +43,7 @@ $is_suntech_posting =
 
 if ($is_suntech_posting) {
     global $wpdb;
-    $note1 = $_POST['note1'];
+    $note1 = urldecode($_POST['note1']);
     $ChkValue = $_POST['ChkValue'];
     $errcode = isset($_POST['errcode']) ? $_POST['errcode'] : '';
     $web = $_POST['web'];
