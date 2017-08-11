@@ -2,7 +2,7 @@
 ## suntech_wc3.zip
 適用版本 WooCommerce v3.1.1 / WordPress v4.8.1
 ## 安裝說明
-請參考 [Installation.pdf](/WooCommerce/blob/master/Installation.pdf)
+請參考 [Installation.pdf](/Installation.pdf)
 ## 支援紅陽支付
 1. 信用卡付款（含分期付款，可超商取貨）
 2. 銀聯卡付款
