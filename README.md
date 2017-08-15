@@ -1,6 +1,8 @@
-# 紅陽科技 WooCommerce 金流模組 v1.2
+ # 紅陽科技 WooCommerce 金流模組 v1.2
 ## suntech_wc3.zip
 適用版本 WooCommerce v3.1.1 / WordPress v4.8.1
+## suntech_wc2.zip
+適用版本 WooCommerce v2.6.5 / WordPress v4.7.5
 ## 安裝說明
 請參考 [Installation.pdf](/Installation.pdf)
 ## 支援紅陽支付
