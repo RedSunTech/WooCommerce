@@ -1,5 +1,12 @@
 # 紅陽科技 WooCommerce 金流模組
 ## WooCommerce v3.x / v4.x 模組
+
+#### 安裝方式：
+請參考 Installation.docx 或 Installation.pdf
+
+#### 模組下載：
+請下載 suntech_v3_v4.zip 檔案，依照安裝文件說明進行安裝設定
+
 #### 支援金流：
 1. 信用卡刷卡（含分期付款）
 2. Apple Pay
@@ -18,11 +25,3 @@
 3. 萊爾富超商
 4. OK超商
 5. 宅配通
-
-
-#### 安裝手冊：
-Installation.docx
-Installation.pdf
-
-#### 模組下載：
-suntech_v3_v4.zip
