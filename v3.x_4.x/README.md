@@ -18,3 +18,11 @@
 3. 萊爾富超商
 4. OK超商
 5. 宅配通
+
+
+####安裝手冊：
+Installation.docx
+Installation.pdf
+
+####模組下載：
+suntech_v3_v4.zip
