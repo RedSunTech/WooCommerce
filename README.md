@@ -1,5 +1,5 @@
 # 紅陽科技 WooCommerce 金流模組
-## WooCommerce v3.x / v4.x / v5.x 模組
+## 適用 WordPress 系統之WooCommerce v3.x / v4.x / v5.x 模組
 ※請進入「v3.x_4.x」資料夾下載
 #### 支援金流：
 1. 信用卡刷卡（含分期付款）
