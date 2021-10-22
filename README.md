@@ -1,5 +1,5 @@
 # 紅陽科技 WooCommerce 金流模組
-## 適用 WordPress 系統之WooCommerce v3.x / v4.x / v5.x 模組
+## 適用 WordPress 系統之WooCommerce v3.x / v4.x / v5.x 模組，支援PHP8.0
 ※請進入「v3.x_4.x」資料夾下載
 #### 支援金流：
 1. 信用卡刷卡（含分期付款）
@@ -19,6 +19,7 @@
 3. 萊爾富超商
 4. OK超商
 5. 宅配通
+6. (7-11、全家、萊爾富、OK超商)搭配【滿額免運費】功能 
 
 
 ## WooCommerce v2.6.5 / WordPress v4.7.5
