@@ -1,5 +1,6 @@
 # 紅陽科技 WooCommerce 金流模組
 ## WooCommerce v3.x / v4.x / v5.x 模組
+請注意，如果怕WooCommerce誤刪"等待付款中"的訂單，請至WooCommerce設定內，修正"保留庫存 (分)"的時間
 
 #### 模組下載：
 請下載 suntech_v3_v4.zip 檔案
